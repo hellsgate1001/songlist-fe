@@ -3,7 +3,14 @@
     <md-list>
       <draggable v-model="songs" @start="drag=true" @stop="drag=false">
         <md-list-item v-for="song in songs" :key="song">
-          <span class="md-list-item-text">{{song}}</span>
+          <div class="md-list-item-text">
+            <span>{{song}}</span>
+            <span>Last Practiced: 21st Oct 2018</span>
+          </div>
+
+          <md-button v-on:click="say(event)">
+            <md-icon>check</md-icon>
+          </md-button>
         </md-list-item>
       </draggable>
     </md-list>
@@ -34,6 +41,22 @@ export default {
         'Jane\'s Addiction - Been Caught Stealing'
       ]
     }
+  },
+  methods: {
+    say(event) {
+      alert('innit')
+      event.stopPropagation()
+    }
   }
 }
 </script>
+
+<style>
+.md-list-item:hover {
+  background-color: #eee;
+  cursor: pointer;
+}
+.sortable-chosen {
+  opacity: 0.3;
+}
+</style>
