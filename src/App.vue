@@ -10,6 +10,7 @@ import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 
 Vue.use(VueMaterial)
+Vue.use(require('vue-moment'));
 
 import SongList from './components/SongList.vue'
 
