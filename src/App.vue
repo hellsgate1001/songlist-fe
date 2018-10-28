@@ -7,9 +7,11 @@
 <script>
 import Vue from 'vue'
 import VueMaterial from 'vue-material'
+import VueResource from 'vue-resource'
 import 'vue-material/dist/vue-material.min.css'
 
 Vue.use(VueMaterial)
+Vue.use(VueResource)
 Vue.use(require('vue-moment'));
 
 import SongList from './components/SongList.vue'

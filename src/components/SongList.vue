@@ -28,57 +28,27 @@ export default {
   },
   data() {
     return {
-      songs: [
-        {
-          name: 'Blondie - Call Me',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Alice In Chains - Man In A Box',
-          lastPracticed: new Date(2018,9,22)
-        },
-        {
-          name: 'Guns N Roses - Nightrain',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Heart - Barracuda',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Alter Bridge - Blackbird',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Green Day - Longview',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Foo Fighters - The Pretender',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Muse - Hysteria',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Black Stone Cherry - Blind Man',
-          lastPracticed: new Date(2018,9,21)
-        },
-        {
-          name: 'Jane\'s Addiction - Been Caught Stealing',
-          lastPracticed: new Date(2018,9,21)
-        }
-      ]
+      songs: []
     }
   },
   methods: {
     say() {
       alert('innit')
     },
-    updatePracticeDate() {
-
+    getSongs() {
+      this.$http.get('http://192.168.1.20:5000/update_practiced')
+        .then((response) => {
+          // eslint-disable-next-line
+          console.log(response.body)
+          this.songs = response.body
+        }, (error) => {
+          // eslint-disable-next-line
+          console.log(error)
+        })
     }
+  },
+  beforeMount() {
+    this.getSongs()
   }
 }
 </script>
