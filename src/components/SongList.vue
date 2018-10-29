@@ -1,31 +1,29 @@
 <template>
   <section>
     <md-list>
-      <draggable v-model="songs" @start="drag=true" @stop="drag=false">
-        <md-list-item v-for="song in songs" :key="song.name">
-          <div class="md-list-item-text">
-            <span>{{song.name}}</span>
-            <span>Last Practiced: {{song.lastPracticed | moment('Do MMM YYYY')}}</span>
-          </div>
+      <md-subheader>
+        <md-button v-on:click="addSong()">
+          Add New Song <md-icon>add</md-icon>
+        </md-button>
+      </md-subheader>
+      <md-list-item v-for="song in songs" :key="song.name">
+        <div class="md-list-item-text">
+          <span>{{song.name}}</span>
+          <span>Last Practiced: {{song.lastPracticed | moment('Do MMM YYYY')}}</span>
+        </div>
 
-          <md-button v-on:click="say()">
-            <md-icon>check</md-icon>
-          </md-button>
-        </md-list-item>
-      </draggable>
+        <md-button v-on:click="say()">
+          <md-icon>check</md-icon>
+        </md-button>
+      </md-list-item>
     </md-list>
 
   </section>
 </template>
 
 <script>
-import draggable from 'vuedraggable'
-
 export default {
   name: 'SongList',
-  components: {
-      draggable
-  },
   data() {
     return {
       songs: []
@@ -34,6 +32,22 @@ export default {
   methods: {
     say() {
       alert('innit')
+    },
+    addSong() {
+      const songName = prompt('Enter the song (Format: <Band Name> - <Song Name>)')
+      if (songName != null && songName != '') {
+        const data = {
+          name: songName
+        }
+        this.$http.post('http://192.168.1.20:5000/add_song', JSON.stringify(data)).
+        then((response) => {
+          this.songs = response.body
+        }, (error) => {
+          alert('Some error occurred')
+          // eslint-disable-next-line
+          console.log(error)
+        })
+      }
     },
     getSongs() {
       this.$http.get('http://192.168.1.20:5000/update_practiced')
