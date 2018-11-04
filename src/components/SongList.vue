@@ -8,11 +8,6 @@
     </div>
     <section id="current" v-if="activeTab === 'tab-current'">
       <md-list>
-        <md-subheader>
-          <md-button v-on:click="addSong()">
-            Add New Song <md-icon>add</md-icon>
-          </md-button>
-        </md-subheader>
         <md-list-item v-for="song in songs" :key="song.name">
           <div class="md-list-item-text">
             <span>{{song.name}}</span>
@@ -28,6 +23,11 @@
 
     <section id="tolearn" v-if="activeTab === 'tab-new'">
       <md-list>
+        <md-subheader>
+          <md-button v-on:click="addSong()">
+            Add New Song <md-icon>add</md-icon>
+          </md-button>
+        </md-subheader>
         <md-list-item v-for="newSong in tolearn" :key="newSong">
           <div class="md-list-item-text">
             <span>{{newSong}}</span>
@@ -78,7 +78,7 @@ export default {
         }
         this.$http.post('http://192.168.1.20:5000/add_song', JSON.stringify(data)).
         then((response) => {
-          this.songs = response.body
+          this.tolearn = response.body.sort()
         }, (error) => {
           alert('Some error occurred')
           // eslint-disable-next-line
@@ -91,8 +91,8 @@ export default {
         .then((response) => {
           // eslint-disable-next-line
           console.log(response.body)
-          this.songs = response.body.songs
-          this.tolearn = response.body.tolearn
+          this.songs = response.body.songs.sort(this.sortSongs)
+          this.tolearn = response.body.tolearn.sort()
         }, (error) => {
           // eslint-disable-next-line
           console.log(error)
@@ -104,11 +104,24 @@ export default {
       }
       this.$http.post('http://192.168.1.20:5000/move_to_current', JSON.stringify(data)).
       then((response) => {
-          this.songs = response.body.songs
-          this.tolearn = response.body.tolearn
+          this.songs = response.body.songs.sort(this.sortSongs)
+          this.tolearn = response.body.tolearn.sort()
       }, (error) => {
         alert(error)
       })
+    },
+    sortSongs(a, b) {
+      if (a.name < b.name) {
+        return -1
+      } else if (a.name > b.name) {
+        return 1
+      } else if (a.lastPracticed < b.lastPracticed) {
+        return -1
+      } else if (a.lastPracticed > b.lastPracticed) {
+        return 1
+      } else {
+        return 0
+      }
     }
   },
   beforeMount() {
